@@ -1,214 +1,243 @@
-# SpaceSentinel
+# 🚀 SpaceSentinel
 
-**AI-Powered Predictive Spacecraft Health and Anomaly Monitoring**
+**AI-powered predictive spacecraft health and anomaly monitoring platform**
 
-A simulated spacecraft mission-control platform: real-time telemetry
-monitoring, hybrid anomaly detection, transparent mission risk scoring,
-predictive trend analysis, and explainable AI-assisted recommendations for
-mission operators.
+> IBM Bob AI Builders Challenge — August Theme: **Advance Space Exploration with AI**
 
-> **This is a simulation and proof-of-concept prototype.** It does not
-> control any real spacecraft. All telemetry is synthetically generated.
+## 🌌 Problem
 
-Built for the **AI Builders Challenge with IBM Bob — August 2026**.
+Spacecraft continuously generate telemetry from multiple systems. Detecting abnormal behavior early is critical because small deviations in temperature, power, communication, or other telemetry can develop into larger mission risks.
 
-## Challenge Theme
+Traditional monitoring can require continuous manual analysis of telemetry and alerts.
 
-**Advance Space Exploration with AI**
+## 💡 Solution
 
-## Problem Statement
+**SpaceSentinel** is a web-based spacecraft mission monitoring platform that uses synthetic spacecraft telemetry to detect anomalies, assess mission risk, generate predictions, and provide AI-assisted insights.
 
-Modern spacecraft generate continuous streams of telemetry across many
-subsystems simultaneously — thermal, power, radiation, communications,
-compute, propulsion, and navigation. A single-metric threshold alarm
-catches obvious failures, but it misses slow-developing trends and, more
-importantly, misses **correlated** anomalies across subsystems that share
-a root cause. Mission operators need a system that can detect abnormal
-behavior early, explain *why* it's abnormal in plain language, quantify
-overall mission risk transparently, and estimate how much time remains
-before a trend becomes a hard safety violation.
+The platform provides a mission-control style dashboard where users can:
 
-## Solution
+* Monitor live spacecraft telemetry
+* Detect abnormal telemetry behavior
+* View spacecraft health and mission status
+* Calculate an overall mission risk assessment
+* Generate predictive insights
+* Simulate different spacecraft scenarios
+* Review mission and anomaly logs
 
-SpaceSentinel implements the full pipeline from raw telemetry to
-operator-ready recommendations:
+All spacecraft telemetry and scenarios are simulated for demonstration purposes.
 
+## 🤖 How IBM Bob Was Used
+
+IBM Bob was used as the primary AI development assistant throughout the project.
+
+Bob assisted with:
+
+* Project architecture and application structure
+* Frontend and backend development
+* FastAPI API implementation
+* React/Vite frontend development
+* Simulation logic
+* Telemetry generation
+* Anomaly detection workflow
+* Risk assessment functionality
+* Debugging and troubleshooting
+* CORS configuration
+* Deployment preparation
+* Documentation and project organization
+* Iterative testing and refinement
+
+The development process used AI-assisted iteration to move from the initial concept to a working full-stack prototype.
+
+## 🏗️ Architecture
+
+```text
+                    ┌──────────────────────┐
+                    │      User / Demo     │
+                    └──────────┬───────────┘
+                               │
+                               ▼
+                    ┌──────────────────────┐
+                    │   React + Vite UI    │
+                    │    GitHub Pages       │
+                    └──────────┬───────────┘
+                               │ HTTPS API
+                               ▼
+                    ┌──────────────────────┐
+                    │   FastAPI Backend    │
+                    │       Render         │
+                    └──────────┬───────────┘
+                               │
+             ┌─────────────────┼─────────────────┐
+             ▼                 ▼                 ▼
+      Telemetry Engine   Anomaly Detection   Risk Engine
+             │                 │                 │
+             └─────────────────┼─────────────────┘
+                               ▼
+                    ┌──────────────────────┐
+                    │ Predictions & AI     │
+                    │ Insights + Mission   │
+                    │ Logs                 │
+                    └──────────────────────┘
 ```
-Telemetry → Validation → Anomaly Detection → Correlation → Risk Scoring
-→ Trend Analysis → Prediction → Explanation → Recommended Action → Dashboard
-```
 
-- A **hybrid 3-layer anomaly detector** (hard thresholds, statistical
-  trend deviation, and an Isolation Forest ML model) catches both sudden
-  breaches and slow-developing ramps.
-- A **transparent, documented risk score** (0-100) weighs severity,
-  confidence, persistence, and how many subsystems are affected — no
-  hidden or random numbers.
-- **Predictive monitoring** projects current trends forward and estimates
-  time-to-threshold using simple, explainable linear regression.
-- **Rule-based explainable AI analysis** composes human-readable
-  diagnosis and recommended actions directly from the evidence — this is
-  deterministic natural-language generation, **not** a call to a large
-  language model, and is labeled as such throughout.
-- A **5-scenario simulation engine** (Normal, Thermal Event, Power
-  Instability, Communication Degradation, Multi-Subsystem Anomaly) drives
-  a live, compelling demonstration.
+## 🧠 AI & Monitoring Approach
 
-## Key Features
+SpaceSentinel processes synthetic telemetry through several monitoring components:
 
-- Real-time mission dashboard with live spacecraft status, risk, and
-  orbital visualization
-- Full telemetry charts (temperature, battery, power, radiation, comms,
-  CPU, memory, fuel) with threshold overlays
-- SOC/SIEM-style Anomaly Center with detail drill-down (observed value,
-  expected range, detection layer, explanation, recommended action)
-- AI Analysis page with confidence-scored, evidence-cited insights
-- Predictions page with trend direction, projected values, and
-  time-to-threshold
-- Interactive Simulation page: start/stop, scenario selector, live event
-  timeline
-- Mission Logs with category filtering
-- Dark, glassmorphic "mission control" UI — no generic admin-dashboard
-  template
+### Telemetry Engine
 
-## Architecture
+Generates simulated spacecraft telemetry and maintains the mission history.
 
-See [`docs/architecture.md`](docs/architecture.md) for the full diagram
-and module breakdown. Summary:
+### Anomaly Detection
 
-- **Backend:** Python, FastAPI, Pydantic, NumPy, Pandas, scikit-learn,
-  SQLite
-- **Frontend:** React, Vite, TypeScript, Tailwind CSS, Recharts, Lucide
-  icons
-- REST polling (1.5-3s intervals) between frontend and backend; see
-  `docs/architecture.md` for why polling was chosen over WebSockets for
-  this MVP
+Analyzes telemetry history and identifies abnormal behavior across spacecraft metrics.
 
-## AI / ML Approach
+### Risk Assessment
 
-See [`docs/ai-approach.md`](docs/ai-approach.md) for full detail,
-including exact formulas and an honest breakdown of what is/isn't machine
-learning. In short:
+Combines active anomalies and their persistence to calculate an overall mission risk level.
 
-- **Anomaly detection:** deterministic thresholds + statistical z-score +
-  scikit-learn `IsolationForest` (trained once on a fixed nominal
-  baseline, not continuously retrained — see the doc for why that matters)
-- **Risk scoring:** a documented deterministic formula, not a model
-- **Prediction:** ordinary least-squares linear regression over recent
-  telemetry
-- **"AI Analysis":** rule-based template + evidence composition — clearly
-  not an LLM call
+### Prediction Engine
 
-## IBM Bob Usage
+Uses telemetry history to generate predictions about potential spacecraft conditions.
 
-*To be completed once the IBM Bob development phase runs. This project
-maintains an honest, evidence-based record of tool usage in*
-[`docs/development-workflow.md`](docs/development-workflow.md) *— that
-file will be updated with the specific task given to Bob and what Bob
-actually produced, and this section will then summarize it. No Bob
-contribution is claimed here or anywhere in this submission until it has
-genuinely happened.*
+### AI Insights
 
-## Claude Code Usage
+Combines detected anomalies, risk assessment, and predictions to produce mission-oriented insights.
 
-Claude Code was used for the full initial build documented in this
-repository: project scaffolding, backend (data models, simulation engine,
-hybrid anomaly detection, risk scoring, prediction, rule-based AI
-analysis, SQLite persistence, REST API), backend automated tests (16
-passing) plus live manual end-to-end verification (including diagnosing
-and fixing a real anomaly-detection bug found during that verification —
-see `docs/testing.md`), the full frontend (design system, all 9 pages,
-routing, charts, live polling), a security review pass, and this
-documentation set. Full detail in
-[`docs/development-workflow.md`](docs/development-workflow.md).
+## 🛰️ Simulation
 
-## Technology Stack
+The platform includes an interactive simulation system.
 
-| Layer | Technologies |
-|---|---|
-| Frontend | React, Vite, TypeScript, Tailwind CSS v4, Recharts, Lucide React, React Router |
-| Backend | Python 3.12, FastAPI, Pydantic, Uvicorn |
-| Data / ML | NumPy, Pandas, scikit-learn (Isolation Forest) |
-| Database | SQLite |
-| Testing | pytest, FastAPI TestClient |
+Users can:
 
-## Running Locally
+1. Start the simulation
+2. Select a spacecraft scenario
+3. Generate synthetic telemetry
+4. Observe the monitoring dashboard
+5. Detect anomalies
+6. Observe changes in mission risk
+7. Review generated mission events
 
-### Prerequisites
-- Node.js 18+ and npm
-- Python 3.10+
-- Git
+The simulation allows the system to demonstrate how a spacecraft monitoring platform could react to changing telemetry conditions without interacting with real spacecraft.
+
+## 🌐 Live Demo
+
+**Application:**
+https://alzadjalinoor277-blip.github.io/space-sentinel/
+
+**Backend API:**
+https://space-sentinel.onrender.com
+
+**Health Check:**
+https://space-sentinel.onrender.com/api/health
+
+## 📸 IBM Bob Evidence
+
+Screenshots documenting the IBM Bob development process are included in:
+
+`docs/bob-evidence/`
+
+These screenshots demonstrate the AI-assisted development workflow used to build and refine SpaceSentinel.
+
+## 🎥 Demo Video
+
+A short demonstration video shows:
+
+1. SpaceSentinel dashboard
+2. Spacecraft telemetry
+3. Simulation controls
+4. Scenario activation
+5. Anomaly detection
+6. Risk assessment
+7. Mission logs
+8. Final working application
+
+**Demo Video:**
+[Watch the SpaceSentinel Demo](VIDEO_LINK_HERE)
+
+## 🛠️ Technology Stack
+
+**Frontend**
+
+* React
+* Vite
+* JavaScript
+* GitHub Pages
+
+**Backend**
+
+* Python
+* FastAPI
+* Uvicorn
+
+**AI / Data**
+
+* Scikit-learn
+* Pandas
+* NumPy
+* Predictive analysis
+* Anomaly detection
+
+**Deployment**
+
+* GitHub Pages
+* Render
+
+**Development**
+
+* IBM Bob
+* Git
+* GitHub
+
+## 🚀 Running Locally
 
 ### Backend
 
 ```bash
 cd backend
-pip install -r requirements.txt --break-system-packages
-python3 -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+
+pip install -r requirements.txt
+
+uvicorn app.main:app --reload
 ```
 
-Verify: `curl http://127.0.0.1:8000/api/health` should return
-`{"status":"ok",...}`.
+Backend:
+
+```text
+http://127.0.0.1:8000
+```
 
 ### Frontend
 
 ```bash
 cd frontend
-cp .env.example .env   # points the frontend at the local backend
+
 npm install
 npm run dev
 ```
 
-Open the printed local URL (default `http://localhost:5173`). The
-dashboard will show "CONNECTING" briefly, then live spacecraft data.
+Frontend:
 
-### Starting a demo scenario
-
-From the **Simulation** page in the UI, click **Start Simulation**, then
-select any scenario (e.g. **Thermal Event**). Or via API:
-
-```bash
-curl -X POST http://127.0.0.1:8000/api/simulation/start
-curl -X POST http://127.0.0.1:8000/api/simulation/scenario \
-  -H "Content-Type: application/json" \
-  -d '{"scenario":"THERMAL_EVENT"}'
+```text
+http://localhost:5173
 ```
 
-## Simulation Scenarios
+## ⚠️ Disclaimer
 
-See [`docs/simulation.md`](docs/simulation.md) for full detail on all 5
-scenarios and what to expect during a demo run.
+SpaceSentinel is an educational simulation and proof-of-concept.
 
-## Testing
+It does **not** control or communicate with real spacecraft. All telemetry and spacecraft scenarios are synthetically generated.
 
-```bash
-cd backend
-python3 -m pytest tests/ -v
-```
+## 👤 Author
 
-16 automated tests covering telemetry generation, all three anomaly
-detection layers, risk scoring, prediction/trend logic, and API contracts.
-See [`docs/testing.md`](docs/testing.md) for full coverage notes and a
-record of manual end-to-end verification (including a real bug found and
-fixed during testing).
+**Noor Al-Zadjali**
 
-## Screenshots
+Computer Security Graduate
+Oman
 
-*Placeholder — screenshots to be added before final submission.*
+GitHub:
+https://github.com/alzadjalinoor277-blip
 
-## Demo
+---
 
-*Placeholder — public demo video link (max 3 minutes) to be added before
-final submission. See the suggested demo flow in*
-[`docs/competition-submission.md`](docs/competition-submission.md)*.*
-
-## Competition
-
-Submitted to the **AI Builders Challenge with IBM Bob**, August 2026,
-theme *Advance Space Exploration with AI*. See
-[`docs/competition-submission.md`](docs/competition-submission.md) for the
-full submission checklist.
-
-## License
-
-See [`LICENSE`](LICENSE).
+Built for the **IBM Bob AI Builders Challenge** 🚀
