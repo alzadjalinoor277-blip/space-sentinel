@@ -153,7 +153,7 @@ A short demonstration video shows:
 8. Final working application
 
 **Demo Video:**
-[Watch the SpaceSentinel Demo](VIDEO_LINK_HERE)
+[Watch the SpaceSentinel Demo](https://www.youtube.com/watch?v=n_XNagri7q4)
 
 ## 🛠️ Technology Stack
 
